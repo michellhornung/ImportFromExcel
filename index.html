@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -35,6 +35,9 @@
     </div>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
+    
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+
     <script type="text/javascript">
         function Upload() {
             //Reference the FileUpload element.
@@ -74,18 +77,10 @@
                 alert("Please upload a valid Excel file.");
             }
             alert('éntrou')
-        var arregua = [];
-        $(function () {
-            $('#tableMic tr').each(function (a, b) {
-                var name = $('.one', b).text();
-                var value = $('.two', b).text();
-                arregua.push({ Name: name, Value: value });
-               
-            });
-            alert(JSON.stringify( arregua));
-        });
+        
         };
         function ProcessExcel(data) {
+            var arregua = [];
             //Read the Excel File data.
             var workbook = XLSX.read(data, {
                 type: 'binary'
@@ -105,7 +100,8 @@
             var row = table.insertRow(-1);
 
             //Add the header cells.
-            var headerCell = document.createElement("TH");
+            var headerCell = null;
+            headerCell = document.createElement("TH");
             headerCell.innerHTML = "one";
             headerCell.className = "one";
             row.appendChild(headerCell);
@@ -122,23 +118,30 @@
 
             //Add the data rows from Excel file.
             for (var i = 0; i < excelRows.length; i++) {
+
                 //Add the data row.
                 var row = table.insertRow(-1);
-
+                
                 //Add the data cells.
                 var cell = row.insertCell(-1);
-                cell.innerHTML = excelRows[i].Id;
-
-                cell = row.insertCell(-1);
-                cell.innerHTML = excelRows[i].Name;
-
-                cell = row.insertCell(-1);
-                cell.innerHTML = excelRows[i].Country;
+                //PEGA O ARRAY DE OBJETOS PELA CHAVE e VALOR
+                Object.entries(excelRows[i]).forEach(([key, value]) => {
+                    console.log('NOME DA COLUNA: '+key+ ' NOME DO VALOR:'+ value);
+                    cell.innerHTML = value;
+                    cell = row.insertCell(-1);
+                    
+                    if(arregua.indexOf(excelRows[i]) === -1){
+                        arregua.push(excelRows[i]);
+                    }
+                });
             }
 
             var dvExcel = document.getElementById("tableMic");
             dvExcel.innerHTML = "";
             dvExcel.appendChild(table);
+
+            //ARRAY COM DADOS DA TABELA
+            alert(JSON.stringify(arregua));
         };
           
         
