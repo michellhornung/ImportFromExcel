@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -25,17 +25,9 @@
             border: 1px solid #ccc;
         }
     </style>
-</head>
-<body>
-    <input type="file" id="fileUpload" />
-    <input type="button" id="upload" value="Upload" onclick="Upload()" />
-    <hr />
-    <div id="tableMic">
-   
-    </div>
+
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
-    
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
 
     <script type="text/javascript">
@@ -138,16 +130,61 @@
 
             var dvExcel = document.getElementById("tableMic");
             dvExcel.innerHTML = "";
-            dvExcel.appendChild(table);
-            //$(JSON.stringify(arregua)).appendTo('#message');
-            $('<div>JSON.stringify(arregua)</div>').appendTo('#message');
+            //dvExcel.appendChild(table);
+       
+            //PASSA O ARRAY COM OS DADOS
+            populateHtmlPage(arregua);
         
+        };
+
+        //COLOCA BACGROUND
+        function setBackground(){
+            const DIV_CORPO_MSG = document.getElementById("corpoMsg");
+                  DIV_CORPO_MSG.style.height = "685px";
+                  DIV_CORPO_MSG.style.borderStyle = "dashed";
+                  DIV_CORPO_MSG.style.backgroundImage = "url('image/MessageImage.jpeg')";
+                  DIV_CORPO_MSG.style.backgroundRepeat = "no-repeat";
+                  DIV_CORPO_MSG.style.backgroundSize = "100% 685px";
+        }
+
+        //COLOCA DIV DE REMETENTE
+        function configureFromDiv(name){
+            const DIV_FROM = document.getElementById('from');
+                 DIV_FROM.style.position = "absolute";  
+                 DIV_FROM.style.top = "375px";
+                 DIV_FROM.style.left = "200px";
+                 DIV_FROM.innerHTML = name;
+        }
+
+        //COLOCA DIV DE MENSAGEM
+        function configureMessageDiv(msg){
+            const DIV_MESSAGE = document.getElementById('message');
+                  DIV_MESSAGE.style.position = "absolute";
+                  DIV_MESSAGE.style.top = "595px";
+                  DIV_MESSAGE.style.left = "100px";
+                  DIV_MESSAGE.innerHTML = msg
+        }
         
+        //FUNCAO PRINCIPAL PARA PASSAR VALORES DO ARRAY
+        function populateHtmlPage(data){
+           setBackground();
+           configureFromDiv(data[0].ColunaA);
+           configureMessageDiv(data[0].ColunaB)
         };
         
     </script>
-    <div "#message">
-<p> nada aqui </p>
+
+</head>
+
+<body>
+    <input type="file" id="fileUpload" />
+    <input type="button" id="upload" value="Upload" onclick="Upload()" />
+    <hr />
+    <div id="tableMic"></div>
+    
+    <div id="corpoMsg">
+        <div id="from"></div>
+        <div id="message"></div>
     </div>
 </body>
 </html>
