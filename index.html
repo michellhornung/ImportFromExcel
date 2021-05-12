@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -168,8 +168,18 @@
         //FUNCAO PRINCIPAL PARA PASSAR VALORES DO ARRAY
         function populateHtmlPage(data){
            setBackground();
-           configureFromDiv(data[0].ColunaA);
-           configureMessageDiv(data[0].ColunaB)
+          
+        //    for (i = 0; i < data.length; i++ ) {
+        //     data += data[i]
+        //    }
+           
+        //    for (j = 0; j < data.length; j++ ) {
+        //     data += data[i]
+        //    }
+           
+           configureFromDiv(data[i].ColunaA);
+           configureMessageDiv(data[j].ColunaB)
+           //alert (JSON.stringify(data));
         };
         
     </script>
