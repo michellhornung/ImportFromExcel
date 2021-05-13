@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title></title>
@@ -24,11 +24,21 @@
             padding: 5px;
             border: 1px solid #ccc;
         }
+
+        canvas
+        {
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
     </style>
 
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/xlsx.full.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.13.5/jszip.js"></script>
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" ></script>
+    <script type="text/javascript" src="http://code.jquery.com/jquery-2.1.1.min.js" ></script>
+    <script type="text/javascript" src="js/html2canvas.min.js" ></script>
+    <script type="text/javascript" src="js/html2canvas.js" ></script>
+    <script type="text/javascript" src="js/jquery.plugin.html2canvas.js" ></script>
+   
 
     <script type="text/javascript">
         function Upload() {
@@ -141,18 +151,18 @@
         function setBackground(){
             const DIV_CORPO_MSG = document.getElementById("corpoMsg");
                   DIV_CORPO_MSG.style.height = "685px";
-                  DIV_CORPO_MSG.style.borderStyle = "dashed";
+                  DIV_CORPO_MSG.style.width = "646px";
                   DIV_CORPO_MSG.style.backgroundImage = "url('image/MessageImage.jpeg')";
                   DIV_CORPO_MSG.style.backgroundRepeat = "no-repeat";
-                  DIV_CORPO_MSG.style.backgroundSize = "100% 685px";
+                  DIV_CORPO_MSG.style.backgroundSize = "646px 685px";
         }
 
         //COLOCA DIV DE REMETENTE
         function configureFromDiv(name){
             const DIV_FROM = document.getElementById('from');
                  DIV_FROM.style.position = "absolute";  
-                 DIV_FROM.style.top = "375px";
-                 DIV_FROM.style.left = "200px";
+                 DIV_FROM.style.top = "370px";
+                 DIV_FROM.style.left = "90px";
                  DIV_FROM.innerHTML = name;
         }
 
@@ -161,26 +171,69 @@
             const DIV_MESSAGE = document.getElementById('message');
                   DIV_MESSAGE.style.position = "absolute";
                   DIV_MESSAGE.style.top = "595px";
-                  DIV_MESSAGE.style.left = "100px";
-                  DIV_MESSAGE.innerHTML = msg
+                  DIV_MESSAGE.style.left = "80px";
+                  return DIV_MESSAGE;
+        }
+
+        function saveAs(uri, filename) {
+            var link = document.createElement('a');
+            if (typeof link.download === 'string') {
+            link.href = uri;
+            link.download = filename;
+
+            //Firefox requires the link to be in the body
+            document.body.appendChild(link);
+
+            //simulate click
+            link.click();
+
+            //remove the link when done
+            document.body.removeChild(link);
+            } else {
+            window.open(uri);
+            }
+      }
+
+      // Save | Download image
+        function downloadImage(data, filename = 'untitled.jpeg') {
+            const a = document.createElement('a');
+            a.href = data;
+            a.download = filename;
+            document.body.appendChild(a);
+            a.click();
         }
         
         //FUNCAO PRINCIPAL PARA PASSAR VALORES DO ARRAY
         function populateHtmlPage(data){
-           setBackground();
-          
-        //    for (i = 0; i < data.length; i++ ) {
-        //     data += data[i]
-        //    }
-           
-        //    for (j = 0; j < data.length; j++ ) {
-        //     data += data[i]
-        //    }
-           
-           configureFromDiv(data[i].ColunaA);
-           configureMessageDiv(data[j].ColunaB)
-           alert (JSON.stringify(data));
+            var randomMsgItem = data[Math.floor(Math.random()*data.length)];
+            var name = Object.values(data[0])[0];
+            setBackground();
+            configureFromDiv(name);
+            const DIV_MESSAGE = configureMessageDiv();
+               
+             for (var i = 0; i < data.length; i++) {
+                  Object.entries(data[i]).forEach(([key, value]) => {
+                     DIV_MESSAGE.innerHTML = Object.values(data[i])[1];
+                  });
+
+                  printImage(i);
+              }
+
+              document.getElementById("corpoMsg").remove();
         };
+
+        function printImage(imgNumber) {
+ 		  html2canvas(document.getElementById("corpoMsg"), {
+            allowTaint: true,
+            foreignObjectRendering:false, //mudar para true para fazer dowload
+            }).then(canvas => {
+                let linebreak = document.createElement('br');
+                document.body.appendChild(linebreak);
+                document.body.appendChild(canvas);
+               
+                //downloadImage(canvas.toDataURL("image/jpeg", 1.0),"msgImg"+imgNumber+".jpeg");
+            });
+	    }
         
     </script>
 
